@@ -90,7 +90,8 @@ void ASCharacter::LookMouse(const FInputActionValue& InputValue)
 
 void ASCharacter::PrimaryAttack()
 {
-	const FTransform SpawnTransform = FTransform(GetControlRotation(),GetActorLocation());
+	const FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	const FTransform SpawnTransform = FTransform(GetControlRotation(),RightHandLocation);
 
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
