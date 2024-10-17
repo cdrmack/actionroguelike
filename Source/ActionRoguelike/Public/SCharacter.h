@@ -34,6 +34,9 @@ public:
 	TObjectPtr<UInputAction> Input_Move;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_Jump;
+
+	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_LookMouse;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
