@@ -7,6 +7,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+#include "SMagicProjectile.h"
+
 ASCharacter::ASCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -48,6 +50,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	EnhancedInputComponent->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ASCharacter::Move);
 	EnhancedInputComponent->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ASCharacter::LookMouse);
+	EnhancedInputComponent->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
 }
 
 void ASCharacter::Move(const FInputActionInstance& Instance)
@@ -83,4 +86,14 @@ void ASCharacter::LookMouse(const FInputActionValue& InputValue)
 
 	AddControllerYawInput(AxisValue.X);
 	AddControllerPitchInput(AxisValue.Y);
+}
+
+void ASCharacter::PrimaryAttack()
+{
+	const FTransform SpawnTransform = FTransform(GetControlRotation(),GetActorLocation());
+
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	GetWorld()->SpawnActor<ASMagicProjectile>(MagicProjectileClass, SpawnTransform, SpawnParameters);
 }

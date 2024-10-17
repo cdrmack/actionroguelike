@@ -36,10 +36,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_LookMouse;
 
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_PrimaryAttack;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> MagicProjectileClass;
+
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	void Move(const FInputActionInstance& Instance);
 	void LookMouse(const FInputActionValue& InputValue);
+	void PrimaryAttack();
 };
