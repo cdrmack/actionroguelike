@@ -8,6 +8,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
+class USInteractComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -27,6 +28,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComp;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USInteractComponent> InteractComp;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 
@@ -42,9 +46,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_PrimaryAttack;
 
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_Interact;
+	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> MagicProjectileClass;
-
+	
 protected:
 	virtual void BeginPlay() override;
 

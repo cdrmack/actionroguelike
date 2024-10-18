@@ -8,6 +8,7 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "SMagicProjectile.h"
+#include "SInteractComponent.h"
 
 ASCharacter::ASCharacter()
 {
@@ -19,6 +20,8 @@ ASCharacter::ASCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
 
+	InteractComp = CreateDefaultSubobject<USInteractComponent>(TEXT("InteractComp"));
+	
 	SpringArmComp->bUsePawnControlRotation = true; // camera reacts to both: vertical and horizontal mouse movement
 	bUseControllerRotationYaw = false; // allows to "orbit" horizontally around the character (see face etc.)
 	GetCharacterMovement()->bOrientRotationToMovement = true; // rotate the character toward the direction of acceleration
@@ -52,6 +55,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	EnhancedInputComponent->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
 	EnhancedInputComponent->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ASCharacter::LookMouse);
 	EnhancedInputComponent->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
+	EnhancedInputComponent->BindAction(Input_Interact, ETriggerEvent::Triggered, this->InteractComp.Get(), &USInteractComponent::PrimaryInteract);
 }
 
 void ASCharacter::Move(const FInputActionInstance& Instance)
