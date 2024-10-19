@@ -30,24 +30,34 @@ void USInteractComponent::PrimaryInteract()
 	
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+
+	TArray<FHitResult> HitResults;
+	constexpr float SweepSphereRadius = 20.0f;
+	FCollisionShape CollisionShape;
+	CollisionShape.SetSphere(SweepSphereRadius);
+	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(HitResults, EyesLocation, EndLocation, FQuat::Identity, ObjectQueryParams, CollisionShape);
+
+	const FColor DebugLineColor = bBlockingHit ? FColor::Green : FColor::Red;
+	DrawDebugLine(GetWorld(), EyesLocation, EndLocation, DebugLineColor, false, 5.0, 0, 2.0);
 	
-	GetWorld()->LineTraceSingleByObjectType(Hit, EyesLocation, EndLocation, ObjectQueryParams);
-	DrawDebugLine(GetWorld(), EyesLocation, EndLocation, FColor::Red, false, 5.0, 0, 2.0);
-
-	if (AActor* HitActor = Hit.GetActor())
+	for (const FHitResult& HitResult : HitResults)
 	{
-		DrawDebugSphere(GetWorld(), HitActor->GetActorLocation(), 10.0, 20, FColor::Red, false, 2.0, 0, 0);
-		if (!HitActor->Implements<USInteractInterface>())
+		if (AActor* HitActor = HitResult.GetActor())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("doesn't implement interact comp"));
-			return;
-		}
-
-		if (APawn* PlayerPawn = Cast<APawn>(GetOwner()))
-		{
-			DrawDebugSphere(GetWorld(), HitActor->GetActorLocation(), 20.0, 20, FColor::Green, false, 2.0, 0, 0);
-			ISInteractInterface::Execute_Interact(HitActor, PlayerPawn);
-		}
+			FColor DebugSphereColor = FColor::Red;
+			if (HitActor->Implements<USInteractInterface>())
+			{
+				DebugSphereColor = FColor::Green;
+				DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, SweepSphereRadius, 20, DebugSphereColor, false, 2.0, 0, 0);
+				
+				if (APawn* PlayerPawn = Cast<APawn>(GetOwner()))
+				{
+					ISInteractInterface::Execute_Interact(HitActor, PlayerPawn);
+				}
+				break; // do not interact with multiple objects
+			}
+			DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, SweepSphereRadius, 20, DebugSphereColor, false, 2.0, 0, 0);
+		}	
 	}
 }
 
