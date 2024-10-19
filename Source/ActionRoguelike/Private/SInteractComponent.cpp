@@ -35,10 +35,10 @@ void USInteractComponent::PrimaryInteract()
 	constexpr float SweepSphereRadius = 20.0f;
 	FCollisionShape CollisionShape;
 	CollisionShape.SetSphere(SweepSphereRadius);
-	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(HitResults, EyesLocation, EndLocation, FQuat::Identity, ObjectQueryParams, CollisionShape);
+	const bool bBlockingHit = GetWorld()->SweepMultiByObjectType(HitResults, EyesLocation, EndLocation, FQuat::Identity, ObjectQueryParams, CollisionShape);
 
 	const FColor DebugLineColor = bBlockingHit ? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), EyesLocation, EndLocation, DebugLineColor, false, 5.0, 0, 2.0);
+	DrawDebugLine(GetWorld(), EyesLocation, EndLocation, DebugLineColor, false, 2.0, 0, 2.0);
 	
 	for (const FHitResult& HitResult : HitResults)
 	{
@@ -54,7 +54,7 @@ void USInteractComponent::PrimaryInteract()
 				{
 					ISInteractInterface::Execute_Interact(HitActor, PlayerPawn);
 				}
-				break; // do not interact with multiple objects
+				break; // do not interact with multiple actors
 			}
 			DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, SweepSphereRadius, 20, DebugSphereColor, false, 2.0, 0, 0);
 		}	
