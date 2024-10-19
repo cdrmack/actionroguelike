@@ -95,6 +95,13 @@ void ASCharacter::LookMouse(const FInputActionValue& InputValue)
 
 void ASCharacter::PrimaryAttack()
 {
+	PlayAnimMontage(AttackAnim);
+	
+	GetWorldTimerManager().SetTimer(PrimaryAttackTimerHandle, this, &ASCharacter::PrimaryAttackSpawnProjectile, PrimaryAttackDelay);
+}
+
+void ASCharacter::PrimaryAttackSpawnProjectile()
+{
 	const FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
 	const FTransform SpawnTransform = FTransform(GetControlRotation(),RightHandLocation);
 

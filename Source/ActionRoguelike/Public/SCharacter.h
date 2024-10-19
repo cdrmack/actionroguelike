@@ -9,6 +9,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class USInteractComponent;
+class UAnimMontage;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -51,6 +52,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> MagicProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TObjectPtr<UAnimMontage> AttackAnim;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	float PrimaryAttackDelay = 0.18f; // Animation Notifies or Animation Events would be better
 	
 protected:
 	virtual void BeginPlay() override;
@@ -59,4 +66,7 @@ private:
 	void Move(const FInputActionInstance& Instance);
 	void LookMouse(const FInputActionValue& InputValue);
 	void PrimaryAttack();
+	void PrimaryAttackSpawnProjectile();
+	
+	FTimerHandle PrimaryAttackTimerHandle;
 };
