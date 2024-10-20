@@ -102,8 +102,20 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttackSpawnProjectile()
 {
+	FHitResult Hit;
+	FVector StartLocation = CameraComp->GetComponentLocation();
+	FVector EndLocation = StartLocation + (GetControlRotation().Vector() * 5000);
+	FCollisionQueryParams CollisionQueryParams;
+	CollisionQueryParams.AddIgnoredActor(this);
+	
+	if (GetWorld()->LineTraceSingleByProfile(Hit, StartLocation, EndLocation, "MagicProjectile", CollisionQueryParams))
+	{
+		EndLocation = Hit.ImpactPoint;
+	}
+	
 	const FVector RightHandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	const FTransform SpawnTransform = FTransform(GetControlRotation(),RightHandLocation);
+	FRotator AdjustedRotation = FRotationMatrix::MakeFromX(EndLocation - RightHandLocation).Rotator();
+	const FTransform SpawnTransform = FTransform(AdjustedRotation,RightHandLocation);
 
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;

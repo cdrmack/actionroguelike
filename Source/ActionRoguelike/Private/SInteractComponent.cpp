@@ -20,8 +20,6 @@ void USInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void USInteractComponent::PrimaryInteract()
 {
-	FHitResult Hit;
-
 	FVector EyesLocation;
 	FRotator EyesRotation;
 	GetOwner()->GetActorEyesViewPoint(EyesLocation, EyesRotation);
