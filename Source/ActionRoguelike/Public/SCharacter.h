@@ -57,7 +57,7 @@ public:
 	TSubclassOf<AActor> MagicProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category="Attack")
-	TSubclassOf<AActor> UltimateAttackClass;
+	TSubclassOf<AActor> UltimateProjectileClass;
 	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TObjectPtr<UAnimMontage> AttackAnim;

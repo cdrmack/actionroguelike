@@ -14,7 +14,7 @@ ASProjectile::ASProjectile()
 	RootComponent = SphereComp;
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
-	ProjectileMovementComp->InitialSpeed = 1000.0f;
+	ProjectileMovementComp->InitialSpeed = 8000.0f;
 	ProjectileMovementComp->bRotationFollowsVelocity = true;
 	ProjectileMovementComp->bInitialVelocityInLocalSpace = true;
 	ProjectileMovementComp->ProjectileGravityScale = 0.0f;
@@ -26,6 +26,12 @@ ASProjectile::ASProjectile()
 void ASProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ASProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	// NOOP
 }
 
 void ASProjectile::Tick(float DeltaTime)

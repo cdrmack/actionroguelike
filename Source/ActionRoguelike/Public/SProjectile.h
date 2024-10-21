@@ -8,15 +8,18 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 
-UCLASS()
+UCLASS(ABSTRACT) // marks this class as incomplete, helps Unreal Editor
 class ACTIONROGUELIKE_API ASProjectile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	ASProjectile();
-	
+
 	virtual void Tick(float DeltaTime) override;
+	
+protected:
+	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<USphereComponent> SphereComp;
@@ -26,7 +29,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UParticleSystemComponent> ParticleComp;
-	
-protected:
-	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	virtual void OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

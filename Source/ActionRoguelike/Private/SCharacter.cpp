@@ -102,7 +102,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(this);
 	
-	if (GetWorld()->LineTraceSingleByProfile(Hit, StartLocation, EndLocation, "MagicProjectile", CollisionQueryParams))
+	if (GetWorld()->LineTraceSingleByProfile(Hit, StartLocation, EndLocation, "Projectile", CollisionQueryParams))
 	{
 		EndLocation = Hit.ImpactPoint;
 	}
@@ -137,5 +137,5 @@ void ASCharacter::UltimateAttack()
 
 void ASCharacter::UltimateAttack_Timer()
 {
-	SpawnProjectile(UltimateAttackClass);
+	SpawnProjectile(UltimateProjectileClass);
 }
