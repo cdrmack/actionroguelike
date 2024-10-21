@@ -48,11 +48,17 @@ public:
 	TObjectPtr<UInputAction> Input_PrimaryAttack;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_UltimateAttack;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_Interact;
 	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> MagicProjectileClass;
 
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> UltimateAttackClass;
+	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TObjectPtr<UAnimMontage> AttackAnim;
 
@@ -65,8 +71,12 @@ protected:
 private:
 	void Move(const FInputActionInstance& Instance);
 	void LookMouse(const FInputActionValue& InputValue);
+
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
 	void PrimaryAttack();
-	void PrimaryAttackSpawnProjectile();
+	void PrimaryAttack_Timer();
+	void UltimateAttack();
+	void UltimateAttack_Timer();
 	
-	FTimerHandle PrimaryAttackTimerHandle;
+	FTimerHandle ProjectileAttackTimerHandle;
 };

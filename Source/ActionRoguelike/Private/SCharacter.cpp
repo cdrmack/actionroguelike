@@ -55,6 +55,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	EnhancedInputComponent->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
 	EnhancedInputComponent->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ASCharacter::LookMouse);
 	EnhancedInputComponent->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
+	EnhancedInputComponent->BindAction(Input_UltimateAttack, ETriggerEvent::Triggered, this, &ASCharacter::UltimateAttack);
 	EnhancedInputComponent->BindAction(Input_Interact, ETriggerEvent::Triggered, this->InteractComp.Get(), &USInteractComponent::PrimaryInteract);
 }
 
@@ -93,14 +94,7 @@ void ASCharacter::LookMouse(const FInputActionValue& InputValue)
 	AddControllerPitchInput(AxisValue.Y);
 }
 
-void ASCharacter::PrimaryAttack()
-{
-	PlayAnimMontage(AttackAnim);
-	
-	GetWorldTimerManager().SetTimer(PrimaryAttackTimerHandle, this, &ASCharacter::PrimaryAttackSpawnProjectile, PrimaryAttackDelay);
-}
-
-void ASCharacter::PrimaryAttackSpawnProjectile()
+void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
 	FHitResult Hit;
 	FVector StartLocation = CameraComp->GetComponentLocation();
@@ -121,5 +115,27 @@ void ASCharacter::PrimaryAttackSpawnProjectile()
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	SpawnParameters.Instigator = this;
 	
-	GetWorld()->SpawnActor<ASMagicProjectile>(MagicProjectileClass, SpawnTransform, SpawnParameters);
+	GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTransform, SpawnParameters);
+}
+
+void ASCharacter::PrimaryAttack()
+{
+	PlayAnimMontage(AttackAnim);
+	GetWorldTimerManager().SetTimer(ProjectileAttackTimerHandle, this, &ASCharacter::PrimaryAttack_Timer, PrimaryAttackDelay);
+}
+
+void ASCharacter::PrimaryAttack_Timer()
+{
+	SpawnProjectile(MagicProjectileClass);
+}
+
+void ASCharacter::UltimateAttack()
+{
+	PlayAnimMontage(AttackAnim);
+	GetWorldTimerManager().SetTimer(ProjectileAttackTimerHandle, this, &ASCharacter::UltimateAttack_Timer, PrimaryAttackDelay);
+}
+
+void ASCharacter::UltimateAttack_Timer()
+{
+	SpawnProjectile(UltimateAttackClass);
 }
