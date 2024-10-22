@@ -42,6 +42,9 @@ public:
 	TObjectPtr<UInputAction> Input_Jump;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
+	TObjectPtr<UInputAction> Input_Dash;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputAction> Input_LookMouse;
 
 	UPROPERTY(EditDefaultsOnly, Category="Input")
@@ -58,6 +61,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> UltimateProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> DashProjectileClass;
 	
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TObjectPtr<UAnimMontage> AttackAnim;
@@ -77,6 +83,8 @@ private:
 	void PrimaryAttack_Timer();
 	void UltimateAttack();
 	void UltimateAttack_Timer();
+	void Dash();
+	void Dash_Timer();
 	
 	FTimerHandle ProjectileAttackTimerHandle;
 };

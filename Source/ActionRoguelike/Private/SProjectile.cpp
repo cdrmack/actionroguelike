@@ -2,6 +2,7 @@
 
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 ASProjectile::ASProjectile()
@@ -10,7 +11,7 @@ ASProjectile::ASProjectile()
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	SphereComp->SetCollisionObjectType(ECC_WorldDynamic);
-	SphereComp->SetCollisionProfileName("MagicProjectile"); // created inside the editor, Project Settings -> Collision
+	SphereComp->SetCollisionProfileName("Projectile"); // created inside the editor, Project Settings -> Collision
 	RootComponent = SphereComp;
 
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
@@ -28,14 +29,21 @@ void ASProjectile::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ASProjectile::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	SphereComp->OnComponentHit.AddDynamic(this, &ASProjectile::OnActorHit);
+}
+
 void ASProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	FVector NormalImpulse, const FHitResult& Hit)
+                              FVector NormalImpulse, const FHitResult& Hit)
 {
-	// NOOP
+	Explode();
 }
 
-void ASProjectile::Tick(float DeltaTime)
+void ASProjectile::Explode_Implementation()
 {
-	Super::Tick(DeltaTime);
+	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+	Destroy();
 }
-

@@ -53,6 +53,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	EnhancedInputComponent->BindAction(Input_Move, ETriggerEvent::Triggered, this, &ASCharacter::Move);
 	EnhancedInputComponent->BindAction(Input_Jump, ETriggerEvent::Triggered, this, &ASCharacter::Jump);
+	EnhancedInputComponent->BindAction(Input_Dash, ETriggerEvent::Triggered, this, &ASCharacter::Dash);
 	EnhancedInputComponent->BindAction(Input_LookMouse, ETriggerEvent::Triggered, this, &ASCharacter::LookMouse);
 	EnhancedInputComponent->BindAction(Input_PrimaryAttack, ETriggerEvent::Triggered, this, &ASCharacter::PrimaryAttack);
 	EnhancedInputComponent->BindAction(Input_UltimateAttack, ETriggerEvent::Triggered, this, &ASCharacter::UltimateAttack);
@@ -138,4 +139,15 @@ void ASCharacter::UltimateAttack()
 void ASCharacter::UltimateAttack_Timer()
 {
 	SpawnProjectile(UltimateProjectileClass);
+}
+
+void ASCharacter::Dash()
+{
+	PlayAnimMontage(AttackAnim);
+	GetWorldTimerManager().SetTimer(ProjectileAttackTimerHandle, this, &ASCharacter::Dash_Timer, PrimaryAttackDelay);
+}
+
+void ASCharacter::Dash_Timer()
+{
+	SpawnProjectile(DashProjectileClass);
 }
