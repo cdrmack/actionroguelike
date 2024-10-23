@@ -28,11 +28,6 @@ ASCharacter::ASCharacter()
 	SpringArmComp->bUsePawnControlRotation = true; // camera reacts to both: vertical and horizontal mouse movement
 	bUseControllerRotationYaw = false; // allows to "orbit" horizontally around the character (see face etc.)
 	GetCharacterMovement()->bOrientRotationToMovement = true; // rotate the character toward the direction of acceleration
-
-	ensure(MagicProjectileClass);
-	ensure(UltimateProjectileClass);
-	ensure(DashProjectileClass);
-	ensure(AttackAnim);
 }
 
 void ASCharacter::BeginPlay()
@@ -129,12 +124,14 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 
 void ASCharacter::PrimaryAttack()
 {
+	ensure(AttackAnim);
 	PlayAnimMontage(AttackAnim);
 	GetWorldTimerManager().SetTimer(ProjectileAttackTimerHandle, this, &ASCharacter::PrimaryAttack_Timer, PrimaryAttackDelay);
 }
 
 void ASCharacter::PrimaryAttack_Timer()
 {
+	ensure(MagicProjectileClass);
 	SpawnProjectile(MagicProjectileClass);
 }
 
@@ -146,6 +143,7 @@ void ASCharacter::UltimateAttack()
 
 void ASCharacter::UltimateAttack_Timer()
 {
+	ensure(UltimateProjectileClass);
 	SpawnProjectile(UltimateProjectileClass);
 }
 
@@ -157,5 +155,6 @@ void ASCharacter::Dash()
 
 void ASCharacter::Dash_Timer()
 {
+	ensure(DashProjectileClass);
 	SpawnProjectile(DashProjectileClass);
 }
