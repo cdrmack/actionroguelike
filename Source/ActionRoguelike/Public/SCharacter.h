@@ -10,6 +10,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class USInteractComponent;
 class UAnimMontage;
+class USAttributeComponent;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -31,6 +32,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USInteractComponent> InteractComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<USAttributeComponent> AttributeComp;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;

@@ -9,6 +9,7 @@
 
 #include "SMagicProjectile.h"
 #include "SInteractComponent.h"
+#include "SAttributeComponent.h"
 
 ASCharacter::ASCharacter()
 {
@@ -21,10 +22,17 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	InteractComp = CreateDefaultSubobject<USInteractComponent>(TEXT("InteractComp"));
+
+	AttributeComp = CreateDefaultSubobject<USAttributeComponent>(TEXT("AttributeComp"));
 	
 	SpringArmComp->bUsePawnControlRotation = true; // camera reacts to both: vertical and horizontal mouse movement
 	bUseControllerRotationYaw = false; // allows to "orbit" horizontally around the character (see face etc.)
 	GetCharacterMovement()->bOrientRotationToMovement = true; // rotate the character toward the direction of acceleration
+
+	ensure(MagicProjectileClass);
+	ensure(UltimateProjectileClass);
+	ensure(DashProjectileClass);
+	ensure(AttackAnim);
 }
 
 void ASCharacter::BeginPlay()
