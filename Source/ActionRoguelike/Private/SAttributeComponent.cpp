@@ -20,6 +20,9 @@ void USAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 bool USAttributeComponent::ApplyHealthChange(float DeltaHealth)
 {
 	Health += DeltaHealth;
+
+	HealthChanged.Broadcast(nullptr, this, DeltaHealth, Health);
+	
 	return true; // TODO
 }
 
