@@ -18,13 +18,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool ApplyHealthChange(float DeltaHealth);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
 	
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float Health;
-
-	UPROPERTY(BlueprintAssignable)
-	FOnHealthChanged HealthChanged;
 };
