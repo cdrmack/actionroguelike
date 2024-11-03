@@ -1,6 +1,5 @@
 #include "SDashProjectile.h"
 
-#include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -16,13 +15,6 @@ void ASDashProjectile::BeginPlay()
 
 	GetWorldTimerManager().SetTimer(DetonateTimerHandle, this, &ASDashProjectile::Explode, DetonateDelay);
 }
-
-// void ASDashProjectile::PostInitializeComponents()
-// {
-// 	Super::PostInitializeComponents();
-//
-// 	SphereComp->OnComponentHit.AddDynamic(this, &ASDashProjectile::OnActorHit);
-// }
 
 void ASDashProjectile::Explode_Implementation()
 {
@@ -43,5 +35,8 @@ void ASDashProjectile::Explode_Implementation()
 void ASDashProjectile::DashTeleport() const
 {
 	AActor* ActorToTeleport = GetInstigator();
-	ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation());
+	if (ensure(ActorToTeleport))
+	{
+		ActorToTeleport->TeleportTo(GetActorLocation(), ActorToTeleport->GetActorRotation());	
+	}
 }
