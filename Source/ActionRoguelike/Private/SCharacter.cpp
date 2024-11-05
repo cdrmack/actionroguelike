@@ -35,6 +35,22 @@ void ASCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ASCharacter::OnHealthChanged(AActor* ChangeInstigator, USAttributeComponent* OwningComponent, float Delta,
+	float NewHealth)
+{
+	if (NewHealth <= 0.0f && Delta < 0.0f)
+	{
+		DisableInput(GetController<APlayerController>());
+	}
+}
+
+void ASCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	AttributeComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
+}
+
 void ASCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

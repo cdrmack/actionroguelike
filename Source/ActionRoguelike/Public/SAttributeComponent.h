@@ -21,6 +21,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChanged OnHealthChanged;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsAlive() const;
 	
 protected:
 	virtual void BeginPlay() override;

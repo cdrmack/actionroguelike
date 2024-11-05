@@ -77,6 +77,11 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	
+	UFUNCTION()
+	void OnHealthChanged(AActor* ChangeInstigator, USAttributeComponent* OwningComponent, float Delta, float NewHealth);
+
+	virtual void PostInitializeComponents() override;
 
 private:
 	void Move(const FInputActionInstance& Instance);
