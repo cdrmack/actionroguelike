@@ -1,7 +1,14 @@
 #include "SMagicProjectile.h"
 
 #include "Components/SphereComponent.h"
+#include "Components/AudioComponent.h"
 #include "SAttributeComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+ASMagicProjectile::ASMagicProjectile()
+{
+	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
+}
 
 void ASMagicProjectile::BeginPlay()
 {
@@ -26,6 +33,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 	{
 		AttributeComp->ApplyHealthChange(-20.0f);
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
 	}
 
 	Explode();
